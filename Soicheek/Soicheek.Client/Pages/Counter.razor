@@ -1,0 +1,26 @@
+﻿@page "/counter"
+@rendermode InteractiveAuto
+
+<PageTitle>Counter</PageTitle>
+
+<section class="container-fluid py-5">
+    <div class="container text-center py-5">
+        <h1>Počítadlo</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <p role="status">Aktuálně máš naklikáno: @currentCount</p>
+                <button class="btn btn-primary py-2" @onclick="IncrementCount">Click me</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

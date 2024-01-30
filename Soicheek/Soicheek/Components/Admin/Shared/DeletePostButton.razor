@@ -1,0 +1,42 @@
+﻿@rendermode InteractiveServer
+
+@inject PostService PostService
+@inject NavigationManager NavigationManager
+
+<button type="button" class="w-100 btn btn-outline-danger my-2" data-bs-toggle="modal" data-bs-target="#deletePostModal">
+    Smazat příspěvek
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePostModalLabel">Smazat příspěvek</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete trvale smazat příspěvek?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-danger" @onclick="DeletePost">Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int PostID { get; set; }
+
+    [Parameter]
+    public int BlogID { get; set; }
+
+    public async Task DeletePost()
+    {
+        await PostService.RemoveAsync(PostID);
+        NavigationManager.NavigateTo($"/Admin/Blog/Edit/{BlogID}");
+    }
+}
+

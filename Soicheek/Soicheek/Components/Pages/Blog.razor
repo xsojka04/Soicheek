@@ -1,0 +1,102 @@
+﻿@page "/blog/{blogId:int}"
+@attribute [StreamRendering]
+
+@using Soicheek.BL.ViewModels.Blog
+@inject BlogService BlogService
+
+<PageTitle>Zápisník</PageTitle>
+
+@if (blog is null)
+{
+    <Soicheek.Components.Shared.Loading />
+} 
+else
+{
+
+    <section class="container-fluid py-5 overlay-primary-30 img-coffee">
+        <div class="container text-start py-5">
+            <div class="p-3 border border-3 border-white">
+                <h1>@blog.Name</h1>
+                <p>@blog.Description</p>
+            </div>
+        </div>
+    </section>
+    @if (blog.Posts is null || blog.Posts.Count == 0)
+    {
+        <section class="container-fluid py-5">
+            <div class="container text-center py-5">
+                <p>Na toto téma jsem nejspíš zapomněl a nenapsal jsem k němu žádné příspěvky.</p>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="container-fluid py-5">
+            <div class="container text-start py-5">
+                <h2>Příspěvky</h2>
+                <ul class="list-group list-group-flush">
+                @foreach (var post in blog.Posts)
+                {
+                        <a class="list-group-item list-group-item-action" href="blog/@blogId/#post-@post.PostID">@post.Title</a>
+                }
+                </ul>
+            </div>
+        </section>
+
+
+
+        <section class="container-fluid py-5 bg-vertical-primary-secondary text-white">
+            <div class="container text-center">
+                <div class="row justify-content-center">
+                    <div class="col-auto border border-3">
+                        <div class="row justify-content-center align-items-center">
+                            <h2 class="col-auto">
+                                Psáno od srdce
+                            </h2>
+                            <svg class="col-auto bi my-3" width="50" height="50" fill="var(--bs-white)">
+                                <use href="images/bootstrap-icons/bootstrap-icons.svg#heart"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="container-fluid py-5">
+            <div class="container text-start py-5">
+                @foreach (var post in blog.Posts)
+                {
+                    <div>
+                        <h2 id="post-@post.PostID">
+                            @post.Title
+                        </h2>
+                        <h6>
+                            @post.Date
+                        </h6>
+                        <p>
+                            @post.Content
+                        </p>
+                    </div>
+                    <hr class="hr" />
+                }
+            </div>
+        </section>
+    }
+
+
+
+}
+
+@code {
+    [Parameter]
+    public int blogId { get; set; }
+    private BlogVM? blog = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        blog = await BlogService.GetByIdAsync(blogId);
+    }
+}

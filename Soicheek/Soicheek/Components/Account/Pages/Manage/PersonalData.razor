@@ -1,0 +1,41 @@
+﻿@page "/Account/Manage/PersonalData"
+
+@inject IdentityUserAccessor UserAccessor
+
+<PageTitle>Osobní údaje</PageTitle>
+
+
+<section class="container-fluid py-5 img-section">
+    <div class="container text-center py-5">
+        <h3>Osobní údaje</h3>
+        <StatusMessage />
+
+        <div class="py-2">
+            <p>
+                S Vaším účtem jsou spojena Vaše osobní data. Tato stránka Vám umoňuje tyto data stáhnou nebo smazat.
+            </p>
+            <p>
+                <strong>Smazáním se tyto data natrvalo odstraní z tohoto systému a již je nebude možné obnovit.</strong>
+            </p>
+            <div class="row justify-content-center">
+                <form action="Account/Manage/DownloadPersonalData" method="post" class="col-md-1">
+                    <AntiforgeryToken />
+                    <button class="btn btn-primary" type="submit">Stáhnout</button>
+                </form>
+                    <p class="col-md-1">
+                    <a href="Account/Manage/DeletePersonalData" class="btn btn-danger">Smazat</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _ = await UserAccessor.GetRequiredUserAsync(HttpContext);
+    }
+}

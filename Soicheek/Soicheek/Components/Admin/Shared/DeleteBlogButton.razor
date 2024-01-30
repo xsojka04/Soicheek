@@ -1,0 +1,38 @@
+﻿@rendermode InteractiveServer
+
+@inject BlogService BlogService
+@inject NavigationManager NavigationManager
+
+<button type="button" class="w-100 btn btn-outline-danger my-2" data-bs-toggle="modal" data-bs-target="#deleteBlogModal">
+    Smazat téma
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteBlogModal" tabindex="-1" aria-labelledby="deleteBlogModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBlogModalLabel">Smazat téma</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete trvale smazat téma a všechny příspěvky s ním spojené?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteBlog">Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int BlogID { get; set; }
+
+    public async Task DeleteBlog()
+    {
+        await BlogService.RemoveAsync(BlogID);
+        NavigationManager.NavigateTo("/Admin/");
+    }
+}

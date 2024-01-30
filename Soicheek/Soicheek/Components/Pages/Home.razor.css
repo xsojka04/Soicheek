@@ -1,0 +1,32 @@
+﻿.carousel-item img {
+    height: 450px;
+    object-fit: cover;
+}
+
+.carousel-caption.overlay-secondary-50 {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+}
+
+.carousel-caption-center {
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: initial;
+}
+
+
+@media (max-width: 640.9px) {
+}
+
+@media (min-width: 641px) {
+    .vertical-text {
+        transform: rotate(180deg);
+        writing-mode: vertical-lr;
+        float: right;
+        font-weight: bold;
+        font-size: 70px;
+        text-transform: uppercase;
+    }
+}

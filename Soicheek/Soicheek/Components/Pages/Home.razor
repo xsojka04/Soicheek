@@ -1,0 +1,247 @@
+﻿@page "/"
+@attribute [StreamRendering]
+
+@using Soicheek.BL.ViewModels.Blog
+@inject BlogService BlogService
+
+<PageTitle>Zápisník</PageTitle>
+
+<!--
+
+<section class="container-fluid py-5 overlay-primary-30 img-coffee">
+    <div class="container text-center py-5">
+        <h1>Zápisník!</h1>
+    </div>
+</section>
+-->
+
+
+<section class="container-fluid py-5">
+    <div class="container text-center">
+        @if (blogs is null)
+        {
+            <Soicheek.Components.Shared.Loading />
+        } 
+        else
+        {
+            <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var blog in blogs)
+                    {
+                        <div class="carousel-item @((blogs.First() == blog) ? "active" : "" )">
+                            <img src="https://picsum.photos/seed/@(blog.GetHashCode())/1000/600" class="d-block w-100 overlay-primary-50">
+                            <div class="carousel-caption overlay-secondary-50"></div>
+                            <div class="carousel-caption">
+                                <h2>Téma: @blog.Name</h2>
+                                <p class="d-none d-md-block">@blog.Description</p>
+                            </div>
+                            <div class="carousel-caption carousel-caption-center">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <a class="btn btn-lg btn-outline-light" href="/blog/@blog.BlogID">
+                                        Číst
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="container-fluid py-5 bg-vertical-primary-secondary text-white">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-auto border border-3">
+                <div class="row justify-content-center align-items-center">
+                    <h2 class="col-auto">
+                        Psáno od srdce
+                    </h2>
+                    <svg class="col-auto bi my-3" width="50" height="50" fill="var(--bs-white)">
+                        <use href="images/bootstrap-icons/bootstrap-icons.svg#heart"></use>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid py-5" id="about">
+    <div class="container text-center py-5">
+        <h2>O blogu</h2>
+        <p>
+
+            Pamatuješ doby, kdy bylo cool mít blog? Já ne.
+            V té době jsem nejspíš ještě byl příliš malý a hloupý na to, abych četl. 
+            Z povídání a legend jsem se však o této formě sdílení informací dozvěděl. 
+            Když přišel čas si vytvořit webovou stránku, na které si budu moci experimentovat s tím, co mě právě zajímá, měl jsem jasno.
+        </p>
+    </div>
+</section>
+
+<section class="container-fluid py-5 bg-secondary text-white">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-9 border-start border-white">
+                <p class="text-start">
+                    Vítej tedy na místě, kde si budu psát o čemkoli, co mě zrovna napadne, a to ve stylu, který mi bude přirozeně vyhovovat.
+                    Rád bych tvrdil, že umím psát, umím udržet myšlenku a věnovat se kvalitně jednomu tématu.
+                    Pokud jsi však dočetl až sem a nejsi disgrafik jako já, zřejmě sis všiml, že jsem úplně nemožný písař.
+                    Nezapomeň! Dorazil jsi sem sám, a kdykoliv to můžeš zabalit a utéct.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid py-5" id="author">
+    <div class="container py-5">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-7 text-center text-md-start">
+                <h2>O autorovi</h2>
+                <p>
+                    Pokud se ti podařilo internetem prokličkovat až na můj blog, tak nejspíš tušíš, kdo jsem. 
+                    Pokud netušíš, tak to je jenom dobře. Pro představu jsem ti tady hodil nějakého random týpka z internetu, 
+                    ať si k těmto bezchbným úryvkům mé geniality můžeš přiřadit tvář.
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img src="images/autor.jpeg" class="img-fluid rounded mx-auto d-block" alt="Autor" style="height: 300px" onclick="this.value = 'prd'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid py-5 bg-secondary text-white">
+    <div class="container text-center">
+        <div class="row justify-content-center border-start border-end d-none d-lg-flex align-items-center">
+            <div class="col-auto text-end">
+                <b>
+                    Můžeš mi tu napsat vzkaz:
+                </b>
+            </div>
+            <div class="col-3 text-start">
+                <input type="text" class="form-control bg-secondary text-white border-2" @bind-value="trollText" @onclick="TrollMethod" />
+            </div>
+        </div>
+        <div class="row justify-content-center d-lg-none border-start border-end">
+            <div class="col-12 col-md-8">
+                <b>
+                    Můžeš mi tu napsat vzkaz
+                </b>
+            </div>
+            <div class="col-12 col-md-8 px-5 pt-2">
+                <input type="text" class="form-control bg-secondary text-white border-2" @bind-value="trollText" @onclick="TrollMethod" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid py-5">
+    <div class="container text-center py-5">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-2 text-primary">
+                <h2 class="vertical-text d-none d-md-block">
+                    Co mě baví?
+                </h2>
+                <h2 class="d-block d-md-none">
+                    Co mě baví?
+                </h2>
+            </div>
+            <div class="col-12 col-md-10">
+                <div class="row">
+                    @foreach (var item in getMakesMeHappyList())
+                    {
+                        <div class="col-12 col-xl-6">
+                            <div class="row p-2">
+                                <div class="col-12 col-sm-5 col-md-3">
+                                    <svg class="bi mx-1 mx-md-3 border border-secondary border-3 p-2" width="90" height="90" fill="var(--bs-secondary)">
+                                        <use href="images/bootstrap-icons/bootstrap-icons.svg#@item.Icon"></use>
+                                    </svg>
+                                </div>
+                                <div class="col-12 col-sm-7 col-md-9 text-center text-sm-start p-2">
+                                    <h3 class="text-secondary">@item.Title</h3>
+                                    <p>@item.Text</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@code {
+    private string trollText = "";
+    private List<BlogVM>? blogs = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        blogs = await BlogService.GetAllAsync();
+    }
+
+    private void TrollMethod()
+    {
+        trollText = "Ale nemysli si, že bych to někdy četl...";
+    }
+
+    private List<MakesMeHappyModel> getMakesMeHappyList()
+    {
+        return new List<MakesMeHappyModel>()
+        {
+            new MakesMeHappyModel() 
+            { 
+                Icon = "bicycle",
+                Title = "Sport",
+                Text = "Kolo, brusle, fotbal a nebo badminton. Čím soutěživější sport, tím lepší."
+            },
+            new MakesMeHappyModel()
+            {
+                Icon = "laptop",
+                Title = "Programování",
+                Text = "Okamžitě jsem tomu propadl. Co jedinec dokáže s klávesnicí je až nepochopitelné."
+            },
+            new MakesMeHappyModel() 
+            { 
+                Icon = "hammer",
+                Title = "DIY",
+                Text = "" 
+            },
+            new MakesMeHappyModel()
+            {
+                Icon = "hash",
+                Title = "Memes",
+                Text = "Tomuto jsem propadl ještě nejspíš během nekonečných hodin dějepisu na střední."
+            },
+            new MakesMeHappyModel()
+            {
+                Icon = "globe-europe-africa",
+                Title = "Cestování",
+                Text = "Rozšiřovat si obzory a stavět se do zvládat nekomfortní situace mě vždy naplňovalo."
+            },
+        };
+    }
+
+    private class MakesMeHappyModel
+    {
+        public required string Icon { get; set; }
+        public required string Title { get; set; }
+        public required string Text { get; set; }
+    }
+}

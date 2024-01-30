@@ -1,0 +1,34 @@
+﻿@using Soicheek.BL.ViewModels.Post
+
+<table class="table align-middle table-hover table-striped table-responsive">
+    <thead class="">
+        <tr>
+            <th>Název</th>
+            <th>Vytvořeno</th>
+            <th class="text-center">Akce</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        @if (Posts.Count == 0)
+        {
+            <tr>
+                <td colspan="3" class="table-active">K tématu prozatím nejsou přiřazeny žádné příspěvky.</td>
+            </tr>
+        }
+        @foreach (var post in Posts)
+        {
+            <tr>
+                <td>@post.Title</td>
+                <td>@post.Date</td>
+                <td class="text-center">
+                    <a class="btn btn-outline-info" href="Admin/Post/Edit/@post.PostID">Editovat</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<PostVM> Posts { get; set; } = new List<PostVM>();
+}

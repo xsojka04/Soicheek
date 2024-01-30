@@ -1,0 +1,83 @@
+﻿@page "/Admin/Post/Add/{BlogID:int}"
+@using Soicheek.BL.ViewModels.Post
+@using Soicheek.BL.ViewModels.Blog
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+@inject BlogService BlogService
+@inject PostService PostService
+
+<PageTitle>Admin</PageTitle>
+
+
+<style>
+    .img-section1 {
+        background-image: url('images/img-coffee.jpg');
+        background-position: 90% 30%;
+    }
+</style>
+
+<section class="container-fluid py-5 img-section-secondary img-section1">
+    <div class="container text-center py-5">
+    </div>
+</section>
+
+<section class="container-fluid py-5">
+    <div class="container text-center py-5">
+        <h1 >Nový příspěvek</h1>
+        <div class="row justify-content-center py-2">
+            <div class="col-12">
+                <EditForm Model="Post" method="post" OnValidSubmit="AddPost" FormName="AddPost">
+                    <DataAnnotationsValidator />
+                    <div class="form-floating mb-3">
+                        <InputSelect class="form-select" @bind-Value="Post.BlogID" disabled aria-required="true" placeholder="blogID">
+                            @foreach (var blog in Blogs)
+                            {
+                                <option value="@blog.BlogID">@blog.Name</option>
+                            }
+                        </InputSelect>
+                        <label for="blogID" class="form-label">Blog</label>
+                        <ValidationMessage For="() => Post.BlogID" class="text-danger" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputText type="text" @bind-Value="Post.Title" class="form-control" aria-required="true" placeholder="title" />
+                        <label for="title" class="form-label">Titulek</label>
+                        <ValidationMessage For="() => Post.Title" class="text-danger" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputTextArea @bind-Value="Post.Content" class="form-control" style="height: 300px" aria-required="true" placeholder="content"></InputTextArea>
+                        <label for="content" class="form-label">Text</label>
+                        <ValidationMessage For="() => Post.Content" class="text-danger" />
+                    </div>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Přidat příspěvek</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public int BlogID { get; set; }
+
+    [SupplyParameterFromForm]
+    private AddPostVM Post { get; set; } = new();
+
+    private List<BlogVM> Blogs { get; set; } = new List<BlogVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Blogs = await BlogService.GetAllAsync();
+        Blogs.OrderBy(x => x.Name).ToList();
+        Post.BlogID = (int)BlogID;
+    }
+
+    public async Task AddPost()
+    {
+        Post.Date = DateOnly.FromDateTime(DateTime.Now);
+        await PostService.AddAsync(Post);
+        NavigationManager.NavigateTo($"/Admin/Blog/Edit/{BlogID}");
+    }
+}
+
+

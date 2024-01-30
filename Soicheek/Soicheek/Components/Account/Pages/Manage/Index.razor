@@ -1,0 +1,35 @@
+﻿@page "/Account/Manage"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using Soicheek.DAL.DataModels
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Profil</PageTitle>
+
+<section class="container-fluid py-5">
+    <div class="container text-center py-5">
+        <h3>Obecné informace</h3>
+        <StatusMessage />
+        <p class="py-2">
+            Jste přihlášeni pomocí emailového účtu <b class="text-primary">@username</b>.
+        </p>
+    </div>
+</section>
+
+@code {
+    private string? username;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        username = await UserManager.GetUserNameAsync(user);
+    }
+}

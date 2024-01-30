@@ -1,0 +1,28 @@
+﻿@page "/Error"
+@using System.Diagnostics
+
+<PageTitle>Error</PageTitle>
+
+<section class="container-fluid py-5">
+    <div class="container text-center py-5">
+        <h1 class="text-danger">Ajaj. Něco se pokazilo.</h1>
+        <h2 class="text-danger">Při zpracování požadavku došlo k chybě.</h2>
+        @if (ShowRequestId)
+        {
+            <p>
+                <strong>Identifikátor požadavku:</strong> <code>@RequestId</code>
+            </p>
+        }
+    </div>
+</section>
+
+@code{
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}
