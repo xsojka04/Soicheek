@@ -1,5 +1,4 @@
-Simple blog web application with which I wanted to explore Blazot in .NET 8, Docker and CD/CI with Gitlab.
-[Check it out](https://soicheek.cz/)
+Simple blog web application with which I wanted to explore Blazot in .NET 8, Docker and CD/CI with Gitlab. it is not looking great, but I have learned and tried a lot during it's creation [check it out here](https://soicheek.cz/).
 
 Database is PostgreSQL, because I wanted to try it out, because it is free. Database is created with Entity Framework Core code-first approach. PostgreSQL is running in Docker container on my home server. 
 Data layer and business logic are each in separate project and each have another separete project for testing each layer. Tests are run automatically in Docker container with Gitlab CI/CD.
