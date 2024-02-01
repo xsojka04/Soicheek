@@ -19,7 +19,7 @@ build:
   stage: build
 
   before_script:
-    - 'docker login -u gitlab-ci-token -p glpat-of76FyMAkjB46CRxVA9K ${CI_REGISTRY}'
+    - 'docker login -u gitlab-ci-token -p ${CI_REGISTRY_TOKEN} ${CI_REGISTRY}'
   script:
     - 'docker build -f Soicheek/Soicheek/Dockerfile -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest .'
     - 'docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest'
